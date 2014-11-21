@@ -1,7 +1,4 @@
-## Download and process UCI HAR Dataset, producing a tidy dataset with the mean
-#  of all -mean() and -std() variables, as well as a codebook with all column
-#  names.
-
+## Download and process UCI HAR Dataset, producing a tidy dataset with the mean of all -mean() and -std() variables, as well as a codebook with all column
 ## Download raw data
 if(!file.exists("./data")){dir.create("./data")}
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
@@ -18,7 +15,7 @@ labels <- read.table(paste("data", data_dir, "activity_labels.txt", sep="/"),
 
 ## import features
 features <- read.table(paste("data", data_dir, "features.txt", sep="/"))
-# determine important features
+# determine significant features
 wanted_feature_indices <- grep("mean\\(|std\\(", features[,2])
 
 ## import training set
@@ -55,12 +52,12 @@ library(reshape2)
 molten <- melt(df, id = c("label", "subject"))
 
 ## produce the tidy dataset with mean of each variable 
-## for each activyt and each subject
+## for each activity and each subject
 tidy <- dcast(molten, label + subject ~ variable, mean)
 
-## write tidy dataset to disk
+## write tidy dataset 
 write.table(tidy, file="HARUSD_means.txt", quote=FALSE, row.names=FALSE, sep="\t")
 
-## write codebook to disk
+## write codebook 
 write.table(paste("* ", names(tidy), sep=""), file="CodeBook.md", quote=FALSE,
             row.names=FALSE, col.names=FALSE, sep="\t")
